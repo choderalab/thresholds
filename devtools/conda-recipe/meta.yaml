@@ -1,0 +1,37 @@
+package:
+  name: thresholds
+  version: 0.1
+
+source:
+  path: ../..
+
+build:
+  preserve_egg_dir: True
+  number: 0
+
+requirements:
+  build:
+    - python
+    - numpy
+    - setuptools
+    - openmmtools
+    - tqdm
+
+  run:
+    - python
+    - numpy
+    - setuptools
+    - openmmtools
+    - tqdm
+
+test:
+  requires:
+    - pytest
+    - pytest-cov
+  imports:
+    - thresholds
+
+about:
+  home: https://github.com/choderalab/thresholds
+  license: MIT License
+  summary: "Find maximum tolerable timesteps in molecular simulation"

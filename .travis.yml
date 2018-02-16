@@ -1,0 +1,38 @@
+language: c
+sudo: false
+
+branches:
+  only:
+    - master
+
+install:
+  - source devtools/travis-ci/install.sh
+  - export PYTHONUNBUFFERED=true
+  - conda config --add channels ${ORGNAME}
+
+script:
+  - conda config --set always_yes yes
+  - conda create -n test python=$python
+  - source activate test
+  - conda config --add channels conda-forge
+  - conda config --add channels omnia
+  - conda config --add channels https://conda.anaconda.org/omnia/label/dev
+  - conda config --set channel_priority false
+  - conda install --quiet pip
+  - conda build devtools/conda-recipe
+  - conda install pytest
+  - conda install --use-local ${PACKAGENAME}
+  - python -m pytest
+
+os:
+  - osx
+  - linux
+
+env:
+  matrix:
+    - python=3.5  CONDA_PY=3.5
+    - python=3.6  CONDA_PY=3.6
+
+  global:
+    - ORGNAME="omnia"
+    - PACKAGENAME="thresholds"
