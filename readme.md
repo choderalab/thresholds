@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/choderalab/thresholds.svg?branch=master)](https://travis-ci.org/choderalab/thresholds?branch=master)
+
 # thresholds
 
 ## Motivation
