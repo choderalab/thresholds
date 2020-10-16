@@ -1,12 +1,26 @@
 from simtk import unit
 
 
-def check_stability(simulation, n_steps=1000, potential_energy_threshold=1000 * unit.kilojoule_per_mole):
+def check_stability(simulation, n_steps=1000, n_rounds=10, potential_energy_threshold=1000 * unit.kilojoule_per_mole):
     """Run simulation for n_steps, periodically checking if the potential energy exceeds a threshold.
-    If the potential energy ever exceeds the threshold or becomes NaN, terminate and return False."""
+    If the potential energy ever exceeds the threshold or becomes NaN, terminate and return False.
+    
+    Parameters
+    ----------
+    simulation : openmm.app.Simulation
+        simulation whose stability we are studying
+    n_steps : int, default 1000
+        how many timesteps to simulate
+    n_rounds : int, default 10
+        how many rounds to use to run n_steps
+        e.g. if n_steps is 1000, specifying n_rounds as 10 will run 10 rounds of 100 steps
+    potential_energy_threshold : simtk.unit (energy)
+        if the potential energy of the simulation exceeds this threshold, NaNs are nigh
 
-    for _ in range(round(n_steps / 100)):
-        simulation.step(100)
+    """
+
+    for _ in range(round(n_rounds)):
+        simulation.step(round(n_steps / n_rounds))
         potential_energy = simulation.context.getState(getEnergy=True).getPotentialEnergy()
         if not (potential_energy <= potential_energy_threshold):
             return False
