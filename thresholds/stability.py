@@ -19,7 +19,7 @@ def check_stability(simulation, n_steps=1000, n_rounds=10, potential_energy_thre
 
     """
 
-    for _ in range(round(n_rounds)):
+    for _ in range(n_rounds):
         simulation.step(round(n_steps / n_rounds))
         potential_energy = simulation.context.getState(getEnergy=True).getPotentialEnergy()
         if not (potential_energy <= potential_energy_threshold):
