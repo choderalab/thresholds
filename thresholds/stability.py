@@ -28,7 +28,7 @@ def check_stability(simulation, n_steps=1000, n_rounds=10, potential_energy_thre
 
 
 def stability_oracle_factory(simulation, set_initial_conditions,
-                             n_steps=1000, potential_energy_threshold=1000 * unit.kilojoule_per_mole):
+                             n_steps=1000, n_rounds=10, potential_energy_threshold=1000 * unit.kilojoule_per_mole):
     """Construct a stochastic function that accepts a scalar (timestep, in femtoseconds)
     and checks whether integration at that timestep appears stable.
 
@@ -41,6 +41,9 @@ def stability_oracle_factory(simulation, set_initial_conditions,
         may set state to a sample from equilibrium, or from some other interesting ensemble of initial conditions.
     n_steps : int
         how many timesteps to simulate
+    n_rounds : int, default 10
+        how many rounds to use to run n_steps
+        e.g. if n_steps is 1000, specifying n_rounds as 10 will run 10 rounds of 100 steps
     potential_energy_threshold : simtk.unit (energy)
         if the potential energy of the simulation exceeds this threshold, NaNs are nigh
 
@@ -61,7 +64,7 @@ def stability_oracle_factory(simulation, set_initial_conditions,
 
         set_initial_conditions(simulation)
 
-        return check_stability(simulation, n_steps, potential_energy_threshold)
+        return check_stability(simulation, n_steps=n_steps, n_rounds=n_rounds, potential_energy_threshold=potential_energy_threshold)
 
     def iterated_stability_oracle(dt, n_iterations=10):
         """Return True if stability_oracle is True n_iterations times, terminating early when possible.
